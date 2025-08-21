@@ -60,6 +60,7 @@ A suite of commands for managing global packages and the tool itself.
 *   `bpack manage selfupdate`: Automatically updates `betterpack` to the latest version.
 *   `bpack manage about <github|npmjs>`: Opens the project's GitHub repository or npm page in your browser.
 *   `bpack manage support`: Opens the "Buy Me a Coffee" page to support the project.
+*   `bpack manage git autocommit <on|off>`: Enable or disable autocommit.
 
 ### `bpack node <file>`
 Executes a JavaScript file using Node.js.
@@ -75,6 +76,14 @@ Runs a command without installing the package globally, using `pnpm dlx` or `yar
 
 ### `bpack create-shortcut <shortcut> <command>`
 Creates a shortcut for a `bpack` command. For example, `bpack create-shortcut bl bpack list` will allow you to run `bpack list` by simply typing `bl`.
+
+### `bpack git <command>`
+A wrapper for common git commands.
+*   `bpack git init`: Initialize a new git repository.
+*   `bpack git clone <repo>`: Clone a repository.
+*   `bpack git pull`: Pull changes from the remote repository.
+*   `bpack git push`: Push changes to the remote repository.
+*   `bpack git commit`: Commit changes. If autocommit is enabled, Gemini will generate a commit message.
 
 ## Usage
 

@@ -343,6 +343,23 @@ function manageCommand(args) {
         return;
     }
 
+    if (args[0] === 'git' && args[1] === 'autocommit') {
+        const status = args[2];
+        if (status !== 'on' && status !== 'off') {
+            console.error("Usage: bpack manage git autocommit <on|off>");
+            process.exit(1);
+        }
+        const configPath = path.join(require('os').homedir(), '.bpackrc');
+        let config = {};
+        if (fs.existsSync(configPath)) {
+            config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        }
+        config.autocommit = status === 'on';
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        console.log(`Autocommit is now ${status}.`);
+        return;
+    }
+
     const [pkgMgr, action, ...rest] = args;
     const availablePms = getAvailablePms();
 
@@ -350,6 +367,7 @@ function manageCommand(args) {
         console.log("Usage: bpack manage <package-manager> <action> [args]");
         console.log("       bpack manage selfupdate");
         console.log("       bpack manage about <github|npmjs>");
+        console.log("       bpack manage git autocommit <on|off>");
         console.log(`  Package Managers: ${availablePms.join(', ')}`);
         console.log("  Actions: install, update, remove, version, list");
         console.log("  Note: 'update' with no package name will attempt to update the manager itself.");
@@ -599,6 +617,39 @@ function runCli() {
                     executeCommand(pm, [cacheCmd]);
                 }
             }
+        }
+        return;
+    }
+
+    if (universalCommand === 'git') {
+        const gitCommand = commandArgs[0];
+        const gitArgs = commandArgs.slice(1);
+        const configPath = path.join(require('os').homedir(), '.bpackrc');
+        let config = {};
+        if (fs.existsSync(configPath)) {
+            config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        }
+
+        if (gitCommand === 'commit' && config.autocommit) {
+            console.log("Autocommit enabled. Generating commit message with Gemini...");
+            const diff = spawnSync('git', ['diff', '--staged'], { encoding: 'utf8' }).stdout;
+            if (!diff) {
+                console.log("No changes to commit.");
+                return;
+            }
+            const prompt = `"review the latest changes and write a detailed commit message:\n\n${diff}"`;
+            const geminiResult = spawnSync('npx', ['@google/gemini-cli', '-p', prompt], { encoding: 'utf8' });
+            if (geminiResult.status === 0) {
+                const commitMessage = geminiResult.stdout.trim();
+                console.log(`Generated commit message:\n${commitMessage}`);
+                executeCommand('git', ['commit', '-m', commitMessage]);
+                executeCommand('git', ['push']);
+            } else {
+                console.error("Failed to generate commit message with Gemini.");
+                process.exit(1);
+            }
+        } else {
+            executeCommand('git', [gitCommand, ...gitArgs]);
         }
         return;
     }
