@@ -13,6 +13,12 @@ BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/involvex)
 
+## Installation
+
+```bash
+npm i betterpack
+```
+
 ## Supported Package Managers
 
 *   **npm** (Node.js Package Manager)
@@ -37,29 +43,38 @@ BetterPack provides a consistent set of commands:
 
 ## Betterpack Commands
 
-*   `gemini`: Start a chat with Gemini.
-*   `host`: Start a web server from the current folder (default port 4020).
-*   `listversions`: List installed versions of all supported package managers.
-*   `manage`: Manage global packages or the package managers themselves.
-    *   `bpack manage <pm> <action> [args]`: Manage global packages.
-    *   `bpack manage selfupdate`: Update betterpack.
-    *   `bpack manage about <github|npmjs>`: Open the project's GitHub repository or npm page.
-    *   `bpack manage support`: Open the "Buy Me a Coffee" page.
-*   `node`: Execute a JavaScript file using Node.js.
-*   `watch`: Watch for file changes and auto-restart a process.
-*   `repair`: Attempt to repair a broken installation.
-*   `noinstall <command>`: Run a command without installing the package globally.
-*   `create-shortcut <shortcut> <command>`: Create a shortcut for a bpack command.
+### `bpack gemini`
+Starts an interactive chat session with Google's Gemini AI.
 
-## Installation (for development/testing)
+### `bpack host`
+Starts a local web server in the current directory.
+*   **Default Port**: `4020`
+*   **Default Host**: `0.0.0.0`
 
-To make `bpack` available as a global command for testing, navigate to the `betterpack` directory and run:
+### `bpack listversions`
+Lists the installed versions of all supported package managers.
 
-```bash
-npm link
-```
+### `bpack manage`
+A suite of commands for managing global packages and the tool itself.
+*   `bpack manage <pm> <action> [args]`: Manage global packages for a specific package manager.
+*   `bpack manage selfupdate`: Automatically updates `betterpack` to the latest version.
+*   `bpack manage about <github|npmjs>`: Opens the project's GitHub repository or npm page in your browser.
+*   `bpack manage support`: Opens the "Buy Me a Coffee" page to support the project.
 
-This will symlink the `bpack` command to your global Node.js executables.
+### `bpack node <file>`
+Executes a JavaScript file using Node.js.
+
+### `bpack watch <file>`
+Watches a file for changes and automatically restarts the process.
+
+### `bpack repair`
+Attempts to repair a broken `betterpack` installation by reinstalling it and clearing package manager caches.
+
+### `bpack noinstall <command>`
+Runs a command without installing the package globally, using `pnpm dlx` or `yarn dlx`.
+
+### `bpack create-shortcut <shortcut> <command>`
+Creates a shortcut for a `bpack` command. For example, `bpack create-shortcut bl bpack list` will allow you to run `bpack list` by simply typing `bl`.
 
 ## Usage
 

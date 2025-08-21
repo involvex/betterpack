@@ -11,6 +11,12 @@ BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/involvex)
 
+## Installation
+
+```bash
+npm i betterpack
+```
+
 ## Supported Package Managers
 
 *   **npm** (Node.js Package Manager)
@@ -67,16 +73,6 @@ Runs a command without installing the package globally, using `pnpm dlx` or `yar
 
 ### `bpack create-shortcut <shortcut> <command>`
 Creates a shortcut for a `bpack` command. For example, `bpack create-shortcut bl bpack list` will allow you to run `bpack list` by simply typing `bl`.
-
-## Installation (for development/testing)
-
-To make `bpack` available as a global command for testing, navigate to the `betterpack` directory and run:
-
-```bash
-npm link
-```
-
-This will symlink the `bpack` command to your global Node.js executables.
 
 ## Usage
 
