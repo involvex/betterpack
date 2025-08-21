@@ -45,6 +45,8 @@ BetterPack provides a consistent set of commands:
 *   `node`: Execute a JavaScript file using Node.js.
 *   `watch`: Watch for file changes and auto-restart a process.
 *   `repair`: Attempt to repair a broken installation.
+*   `noinstall <command>`: Run a command without installing the package globally.
+*   `create-shortcut <shortcut> <command>`: Create a shortcut for a bpack command.
 
 ## Installation (for development/testing)
 

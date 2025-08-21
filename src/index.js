@@ -445,8 +445,16 @@ function displayHelp() {
 }
 
 function runCli() {
-    const args = process.argv.slice(2);
+    let args = process.argv.slice(2);
     getAvailablePms(); // Populate availablePmPaths at the start
+
+    const configPath = path.join(require('os').homedir(), '.bpackrc');
+    if (fs.existsSync(configPath)) {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        if (config[args[0]]) {
+            args = config[args[0]].split(' ');
+        }
+    }
 
     if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
         displayHelp();
@@ -550,6 +558,31 @@ function runCli() {
     if (universalCommand === 'gemini') {
         console.log("Starting a chat with Gemini...");
         executeCommand('npx', ['@google/gemini-cli', ...commandArgs]);
+        return;
+    }
+
+    if (universalCommand === 'noinstall') {
+        const availablePms = getAvailablePms();
+        const pm = availablePms.includes('pnpm') ? 'pnpm' : 'yarn';
+        console.log(`Using ${pm} to run command without installation...`);
+        executeCommand(pm, ['dlx', ...commandArgs]);
+        return;
+    }
+
+    if (universalCommand === 'create-shortcut') {
+        const [shortcut, ...command] = commandArgs;
+        if (!shortcut || command.length === 0) {
+            console.error("Usage: bpack create-shortcut <shortcut> <command>");
+            process.exit(1);
+        }
+        const configPath = path.join(require('os').homedir(), '.bpackrc');
+        let config = {};
+        if (fs.existsSync(configPath)) {
+            config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        }
+        config[shortcut] = command.join(' ');
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        console.log(`Shortcut '${shortcut}' created for 'bpack ${command.join(' ')}'`);
         return;
     }
 
