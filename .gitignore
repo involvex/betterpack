@@ -1,0 +1,6 @@
+.git/
+.pkg-cache/
+node_modules/
+dist/
+package.tgz
+.env
