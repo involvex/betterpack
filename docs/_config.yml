@@ -11,3 +11,19 @@ logo: "/assets/logo.png"
 aux_links:
   "View on GitHub":
     - "https://github.com/involvex/betterpack"
+
+nav_links:
+  - title: Support
+    url: "#support-the-project"
+  - title: Package Managers
+    url: "#supported-package-managers"
+  - title: Universal Commands
+    url: "#universal-commands"
+  - title: Betterpack Commands
+    url: "#betterpack-commands"
+  - title: Installation
+    url: "#installation"
+  - title: Usage
+    url: "#usage"
+  - title: How it Works
+    url: "#how-it-works"
