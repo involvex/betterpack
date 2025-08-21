@@ -1,6 +1,6 @@
 {
   "name": "betterpack",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "A universal package manager CLI for Node.js projects.",
   "main": "index.js",
   "module": "dist/bpack.mjs",
