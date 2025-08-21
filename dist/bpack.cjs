@@ -19,8 +19,6 @@ function requireSrc () {
 	const fs = require$$1;
 	const path = require$$2;
 
-	const availablePmPaths = {}; // New global variable
-
 	const PACKAGE_MANAGERS = {
 	    "npm": {
 	        "commands": {
@@ -100,15 +98,15 @@ function requireSrc () {
 	};
 
 	const GLOBAL_COMMANDS = {
-	    npm: { install: ['install', '-g'], update: ['update', '-g'], remove: ['uninstall', '-g'] },
-	    yarn: { install: ['global', 'add'], update: ['global', 'upgrade'], remove: ['global', 'remove'] },
-	    pnpm: { install: ['add', '-g'], update: ['update', '-g'], remove: ['remove', '-g'] },
-	    bun: { install: ['add', '-g'], update: ['update', '-g'], remove: ['remove', '-g'] },
+	    npm: { install: ['install', '-g'], update: ['update', '-g'], remove: ['uninstall', '-g'], list: ['list', '-g'] },
+	    yarn: { install: ['global', 'add'], update: ['global', 'upgrade'], remove: ['global', 'remove'], list: ['global', 'list'] },
+	    pnpm: { install: ['add', '-g'], update: ['update', '-g'], remove: ['remove', '-g'], list: ['list', '-g'] },
+	    bun: { install: ['add', '-g'], update: ['update', '-g'], remove: ['remove', '-g'], list: ['ls', '-g'] },
 	};
 
 	function getAvailablePms() {
 	    const allPms = ['npm', 'yarn', 'pnpm', 'bun'];
-	    const executablesToFind = [...allPms, 'node', 'http-server']; // Add node and http-server
+	    const executablesToFind = [...allPms, 'node', 'http-server', 'npx']; // Add node, http-server, and npx
 	    const availablePms = [];
 	    for (const pm of executablesToFind) { // Iterate through all executables
 	        // Use 'where' on Windows or 'which' on Linux/macOS to find the executable path
@@ -116,11 +114,11 @@ function requireSrc () {
 	        const result = spawnSync(findCmd, [pm], { shell: true, encoding: 'utf8' });
 
 	        if (result.status === 0 && result.stdout) {
-	            const pmPath = result.stdout.trim().split('\n')[0]; // Get the first path if multiple
+	            result.stdout.trim().replace(/\r/g, '').split('\n')[0]; // Get the first path if multiple and remove carriage returns
+	            // On Windows, if the path doesn't have an extension, check for .cmd
 	            if (allPms.includes(pm)) { // Only add package managers to availablePms list
 	                availablePms.push(pm);
 	            }
-	            availablePmPaths[pm] = pmPath; // Store the absolute path for all found executables
 	        } else {
 	            // Fallback to just checking --version if path not found (e.g., for built-in npm)
 	            // This part might need refinement for non-PM executables
@@ -129,7 +127,6 @@ function requireSrc () {
 	                if (allPms.includes(pm)) {
 	                    availablePms.push(pm);
 	                }
-	                availablePmPaths[pm] = pm; // Store just the name, rely on shell for execution
 	            }
 	        }
 	    }
@@ -195,42 +192,88 @@ function requireSrc () {
 	    return [pmName, universalCommand, ...args];
 	}
 
+	function findPathKey(env = process.env) {
+	    if (process.platform !== 'win32') {
+	        return 'PATH';
+	    }
+	    const pathKey = Object.keys(env).find(key => key.toLowerCase() === 'path');
+	    return pathKey || 'PATH';
+	}
+
 	function executeCommand(command, args, options = {}) {
 	    if (!options.silent) {
 	        console.log(`Executing: ${command} ${args.join(' ')}`);
 	    }
 
+	    const env = { ...process.env };
+	    const pathKey = findPathKey(env);
+	    const localBinPath = path.join(__dirname, '..', 'node_modules', '.bin');
+
+	    // Prepend local bin path
+	    env[pathKey] = [localBinPath, env[pathKey]].filter(Boolean).join(path.delimiter);
+
 	    const spawnOptions = {
 	        stdio: 'inherit',
-	        shell: false, // Default to false, will be set to true if needed
-	        env: { ...process.env } // Start with a copy of the current process.env
+	        shell: true,
+	        env: env
 	    };
 
-	    // Ensure PATH is correctly set, including local node_modules/.bin
-	    let currentPath = spawnOptions.env.PATH || '';
-	    if (process.platform === 'win32') {
-	        const localBinPath = path.join(__dirname, '..', 'node_modules', '.bin');
-	        spawnOptions.env.PATH = localBinPath + path.delimiter + currentPath;
-	    } else {
-	        spawnOptions.env.PATH = currentPath;
+	    console.log(`executeCommand: Spawning command: ${command} with args: ${args.join(' ')}`);
+	    const child = spawn(command, args, spawnOptions);
+
+	    child.on('error', (err) => {
+	        console.error(`Failed to start subprocess: ${err.message}`);
+	    });
+	}
+
+	function executeOutdatedCommand(command, args) {
+	    console.log(`Executing: ${command} ${args.join(' ')}`);
+
+	    const env = { ...process.env };
+	    const pathKey = findPathKey(env);
+	    const localBinPath = path.join(__dirname, '..', 'node_modules', '.bin');
+
+	    // Prepend local bin path
+	    env[pathKey] = [localBinPath, env[pathKey]].filter(Boolean).join(path.delimiter);
+
+	    const spawnOptions = {
+	        stdio: 'pipe',
+	        shell: true,
+	        env: env
+	    };
+
+	    const child = spawn(command, args, spawnOptions);
+
+	    let stdout = '';
+	    let stderr = '';
+
+	    if (child.stdout) {
+	        child.stdout.on('data', (data) => {
+	            stdout += data.toString();
+	        });
+	    }
+	    if (child.stderr) {
+	        child.stderr.on('data', (data) => {
+	            stderr += data.toString();
+	        });
 	    }
 
-	    let actualCommand = command;
-	    let actualArgs = args;
+	    child.on('close', (code) => {
+	        if (code === 0 && stdout.trim() === '' && stderr.trim() === '') {
+	            console.log('All dependencies are up to date.');
+	        } else {
+	            if (stdout.trim()) {
+	                console.log(stdout.trim());
+	            }
+	            if (stderr.trim()) {
+	                console.error(stderr.trim());
+	            }
+	        }
+	    });
 
-	    // Use absolute path if available for any command
-	    if (availablePmPaths[command]) {
-	        actualCommand = availablePmPaths[command];
-	    } else if (command === 'node' && availablePmPaths['node']) { // Explicitly handle 'node'
-	        actualCommand = availablePmPaths['node'];
-	    } else if (command === 'http-server' && availablePmPaths['http-server']) { // Explicitly handle 'http-server'
-	        actualCommand = availablePmPaths['http-server'];
-	    } else {
-	        // Fallback to shell: true if absolute path not found and it's not a known executable
-	        spawnOptions.shell = true;
-	    }
-
-	    spawn(actualCommand, actualArgs, spawnOptions);
+	    child.on('error', (err) => {
+	        console.error(`Failed to start subprocess: ${err.message}`);
+	    });
 	}
 
 	function listversions() {
@@ -244,13 +287,74 @@ function requireSrc () {
 	}
 
 	function manageCommand(args) {
+	    if (args[0] === 'selfupdate') {
+	        console.log("Attempting to self-update betterpack...");
+	        const pmsToCheck = {
+	            npm: ['list', '-g', '--depth=0'],
+	            pnpm: ['list', '-g', '--depth=0'],
+	            yarn: ['global', 'list']
+	        };
+	        let installedWith = null;
+
+	        for (const pm in pmsToCheck) {
+	            const result = spawnSync(pm, pmsToCheck[pm], { shell: true, encoding: 'utf8' });
+	            if (result.status === 0 && result.stdout && result.stdout.includes('betterpack')) {
+	                installedWith = pm;
+	                break;
+	            }
+	        }
+
+	        if (installedWith) {
+	            console.log(`betterpack was installed with ${installedWith}. Attempting update...`);
+	            let updateArgs;
+	            switch (installedWith) {
+	                case 'npm':
+	                    updateArgs = ['install', '-g', 'betterpack@latest'];
+	                    break;
+	                case 'pnpm':
+	                    updateArgs = ['update', '-g', 'betterpack'];
+	                    break;
+	                case 'yarn':
+	                    updateArgs = ['global', 'upgrade', 'betterpack'];
+	                    break;
+	            }
+	            executeCommand(installedWith, updateArgs);
+	        } else {
+	            console.error("Could not determine how betterpack was installed globally. Please update manually.");
+	            process.exit(1);
+	        }
+	        return;
+	    }
+
+	    if (args[0] === 'about') {
+	        const topic = args[1];
+	        let url;
+	        switch (topic) {
+	            case 'github':
+	                url = 'https://github.com/involvex/betterpack';
+	                break;
+	            case 'npmjs':
+	                url = 'https://www.npmjs.com/package/betterpack';
+	                break;
+	            default:
+	                console.error("Usage: bpack manage about <github|npmjs>");
+	                process.exit(1);
+	        }
+	        console.log(`Opening ${url}...`);
+	        const openCmd = process.platform === 'win32' ? 'start' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+	        executeCommand(openCmd, [url], { silent: true });
+	        return;
+	    }
+
 	    const [pkgMgr, action, ...rest] = args;
 	    const availablePms = getAvailablePms();
 
 	    if (!pkgMgr || !action) {
 	        console.log("Usage: bpack manage <package-manager> <action> [args]");
+	        console.log("       bpack manage selfupdate");
+	        console.log("       bpack manage about <github|npmjs>");
 	        console.log(`  Package Managers: ${availablePms.join(', ')}`);
-	        console.log("  Actions: install, update, remove, version");
+	        console.log("  Actions: install, update, remove, version, list");
 	        console.log("  Note: 'update' with no package name will attempt to update the manager itself.");
 	        process.exit(1);
 	    }
@@ -290,7 +394,7 @@ function requireSrc () {
 
 	    const baseArgs = GLOBAL_COMMANDS[pkgMgr][action];
 	    if (!baseArgs) {
-	        console.error(`Error: Unknown action '${action}'. Supported: install, update, remove, version`);
+	        console.error(`Error: Unknown action '${action}'. Supported: install, update, remove, version, list`);
 	        process.exit(1);
 	    }
 
@@ -298,75 +402,48 @@ function requireSrc () {
 	    executeCommand(pkgMgr, cmdArgs);
 	}
 
-	function displayHelp(command) {
-	    switch (command) {
-	        case 'listversions':
-	            console.log("Usage: bpack listversions");
-	            console.log("  Lists installed versions of all supported package managers (npm, yarn, pnpm, bun).");
-	            console.log("  Only supported on Windows due to reliance on PowerShell.");
-	            break;
-	        case 'manage':
-	            console.log("Usage: bpack manage <package-manager> <action> [args]");
-	            console.log("  Manages global packages or the package managers themselves.");
-	            console.log("  <package-manager>: npm, yarn, pnpm, bun");
-	            console.log("  <action>: install, update, remove, version");
-	            console.log("  'update' with no package name will attempt to update the manager itself.");
-	            break;
-	        case 'buildexe':
-	            console.log("Usage: bpack buildexe");
-	            console.log("  Packages the project into an executable using 'astra'.");
-	            console.log("  WARNING: This is a very slow process and requires a C++ compiler toolchain.");
-	            console.log("  Automatically detects your Node.js version, platform, and architecture.");
-	            break;
-	        case 'node':
-	            console.log("Usage: bpack node <file.js> [args]");
-	            console.log("  Executes a JavaScript file using Node.js.");
-	            console.log("  Example: bpack node my-script.js --some-arg value");
-	            break;
-	        case 'watch':
-	            console.log("Usage: bpack watch <script.js or command> [args]");
-	            console.log("  Watches for file changes and automatically restarts a process.");
-	            console.log("  Requires 'nodemon' to be installed (bpack will prompt to install if missing).");
-	            console.log("  Tip: For debugging, use 'bpack watch --inspect <script.js>'");
-	            break;
-	        case 'host':
-	            console.log("Usage: bpack host [path] [--port <port>] [--host <host>]");
-	            console.log("  Starts a web server from the given folder (defaults to current directory).");
-	            console.log("  Default port: 4020, Default host: 0.0.0.0");
-	            console.log("  Requires 'http-server' to be installed (bpack will prompt to install if missing).");
-	            break;
-	        default:
-	            // General help message (existing one)
-	            console.log("Usage: bpack <command> [args]");
-	            console.log("\nUniversal Package Manager Commands:");
-	            console.log("  install        Install project dependencies.");
-	            console.log("  add            Add a new dependency to the project.");
-	            console.log("  remove         Remove a dependency from the project.");
-	            console.log("  update         Update project dependencies.");
-	            console.log("  outdated       Check for outdated dependencies.");
-	            console.log("  ci             Install dependencies from a lockfile.");
-	            console.log("  run            Run a script defined in package.json.");
-	            console.log("  test           Run project tests.");
-	            console.log("  build          Build the project.");
-	            console.log("  start          Start the project.");
-	            console.log("  pack           Create a package tarball.");
-	            console.log("  list           List installed packages.");
-	            console.log("  global         List global packages.");
-	            console.log("  cache clean    Clear the package manager cache.");
-	            console.log("  doctor         Run a health check.");
-	            console.log("  link           Link a local package.");
-	            console.log("  search         Search for packages (uses npm).");
-	            console.log("  lint, lint --fix   Run linter.");
-	            console.log("  audit, audit --fix Run security audit.");
-	            console.log("\nBetterpack Commands:");
-	            console.log("  listversions   List installed versions of all supported package managers.");
-	            console.log("  manage         Manage global packages or the package managers themselves.");
-	            console.log("  buildexe       Package project into an executable using nexe.");
-	            console.log("  node           Execute a JavaScript file using Node.js.");
-	            console.log("  watch          Watch for file changes and auto-restart a process.");
-	            console.log("  host           Start a web server from the current folder (default port 4020).");
-	            break;
+	function displayHelp() {
+	    console.log("\nUsage: bpack <command> [args]");
+	    console.log("\n\x1b[1mUniversal Package Manager Commands:\x1b[0m");
+	    const universalCommands = {
+	        "install": "Install project dependencies.",
+	        "add": "Add a new dependency to the project.",
+	        "remove": "Remove a dependency from the project.",
+	        "update": "Update project dependencies.",
+	        "outdated": "Check for outdated dependencies.",
+	        "ci": "Install dependencies from a lockfile.",
+	        "run": "Run a script defined in package.json.",
+	        "test": "Run project tests.",
+	        "build": "Build the project.",
+	        "start": "Start the project.",
+	        "pack": "Create a package tarball.",
+	        "list": "List installed packages.",
+	        "global": "List global packages.",
+	        "cache clean": "Clear the package manager cache.",
+	        "doctor": "Run a health check.",
+	        "link": "Link a local package.",
+	        "search": "Search for packages (uses npm).",
+	        "lint, lint --fix": "Run linter.",
+	        "audit, audit --fix": "Run security audit."
+	    };
+	    for (const [cmd, desc] of Object.entries(universalCommands)) {
+	        console.log(`  \x1b[36m${cmd.padEnd(20)}\x1b[0m ${desc}`);
 	    }
+
+	    console.log("\n\x1b[1mBetterpack Commands:\x1b[0m");
+	    const betterpackCommands = {
+	        "listversions": "List installed versions of all supported package managers.",
+	        "manage": "Manage global packages or the package managers themselves.",
+	        "buildexe": "Package project into an executable using nexe.",
+	        "node": "Execute a JavaScript file using Node.js.",
+	        "watch": "Watch for file changes and auto-restart a process.",
+	        "host": "Start a web server from the current folder (default port 4020).",
+	        "gemini": "Start a chat with Gemini."
+	    };
+	    for (const [cmd, desc] of Object.entries(betterpackCommands)) {
+	        console.log(`  \x1b[36m${cmd.padEnd(20)}\x1b[0m ${desc}`);
+	    }
+	    console.log("");
 	    process.exit(0);
 	}
 
@@ -374,7 +451,7 @@ function requireSrc () {
 	    const args = process.argv.slice(2);
 	    getAvailablePms(); // Populate availablePmPaths at the start
 
-	    if (args[0] === '--help' || args[0] === '-h') {
+	    if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
 	        displayHelp();
 	        return;
 	    }
@@ -383,18 +460,18 @@ function requireSrc () {
 	    const commandArgs = args.slice(1);
 
 	    // Define internal commands that have specific help messages
-	    const internalCommands = ['listversions', 'manage', 'buildexe', 'node', 'watch', 'host'];
+	    const internalCommands = ['listversions', 'manage', 'buildexe', 'node', 'watch', 'host', 'gemini'];
 
 	    // If a command is provided and it's an internal command, check for --help in its arguments
 	    if (universalCommand && internalCommands.includes(universalCommand) && (commandArgs.includes('--help') || commandArgs.includes('-h'))) {
-	        displayHelp(universalCommand);
+	        displayHelp();
 	        return;
 	    }
 
 	    // If no command is provided, display general help
 	    if (!universalCommand) {
 	        displayHelp();
-	        return; // Added return here to prevent further execution
+	        return;
 	    }
 
 	    const fixIndex = commandArgs.indexOf('--fix');
@@ -469,7 +546,13 @@ function requireSrc () {
 	        }
 
 	        console.log(`Starting web server on http://${defaultHost}:${defaultPort}`);
-	        executeCommand('http-server', hostArgs);
+	        executeCommand('npx', ['http-server', ...hostArgs]);
+	        return;
+	    }
+
+	    if (universalCommand === 'gemini') {
+	        console.log("Starting a chat with Gemini...");
+	        executeCommand('npx', ['@google/gemini-cli', ...commandArgs]);
 	        return;
 	    }
 
@@ -481,7 +564,11 @@ function requireSrc () {
 
 	    if (translatedCommand) {
 	        const [cmd, ...cmdArgs] = translatedCommand;
-	        executeCommand(cmd, cmdArgs);
+	        if (universalCommand === 'outdated') {
+	            executeOutdatedCommand(cmd, cmdArgs);
+	        } else {
+	            executeCommand(cmd, cmdArgs);
+	        }
 	    } else {
 	        process.exit(1);
 	    }

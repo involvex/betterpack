@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const { runCli } = require('./src/index.js');
+const { runCli} = require('./src/index.js');
 
-runCli();
+runCli( );

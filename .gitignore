@@ -1,6 +1,8 @@
-.git/
-.pkg-cache/
-node_modules/
-dist/
+.git/*
+.pkg-cache/*
+node_modules/*
+dist/*
+package-lock.json
+
 package.tgz
 .env

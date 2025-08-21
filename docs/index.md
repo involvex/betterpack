@@ -1,3 +1,7 @@
+---
+title: BetterPack Documentation
+---
+
 # BetterPack - A Universal Node.js Package Manager CLI
 
 BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify package management across different Node.js ecosystems. It automatically detects the package manager used in your project (`npm`, `yarn`, or `pnpm`) and translates universal commands into the appropriate commands for that manager.
@@ -64,9 +68,3 @@ BetterPack will detect the package manager based on the lock file present and ex
 1.  **Detection:** BetterPack checks for the presence of `package-lock.json` (for npm), `yarn.lock` (for yarn), or `pnpm-lock.yaml` (for pnpm) in the current directory to identify the active package manager.
 2.  **Translation:** Based on the detected package manager, it translates the universal command (e.g., `install`) into the manager-specific command (e.g., `npm install`, `yarn install`, `pnpm install`).
 3.  **Execution:** The translated command is then executed using Node.js's `child_process.spawn`.
-
-## Future Enhancements
-
-*   More robust argument parsing.
-*   Configuration file for custom command mappings or aliases.
-*   Interactive mode for command selection.
