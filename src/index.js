@@ -335,6 +335,14 @@ function manageCommand(args) {
         return;
     }
 
+    if (args[0] === 'support') {
+        const url = 'https://www.buymeacoffee.com/involvex';
+        console.log(`Opening ${url}...`);
+        const openCmd = process.platform === 'win32' ? 'start' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+        executeCommand(openCmd, [url], { silent: true });
+        return;
+    }
+
     const [pkgMgr, action, ...rest] = args;
     const availablePms = getAvailablePms();
 
@@ -542,6 +550,23 @@ function runCli() {
     if (universalCommand === 'gemini') {
         console.log("Starting a chat with Gemini...");
         executeCommand('npx', ['@google/gemini-cli', ...commandArgs]);
+        return;
+    }
+
+    if (universalCommand === 'repair') {
+        console.log("Attempting to repair betterpack...");
+        executeCommand('npm', ['install', '-g', 'betterpack@latest']);
+        const availablePms = getAvailablePms();
+        for (const pm of availablePms) {
+            if (PACKAGE_MANAGERS[pm] && PACKAGE_MANAGERS[pm].commands.cache) {
+                const cacheCmd = PACKAGE_MANAGERS[pm].commands.cache;
+                if (typeof cacheCmd === 'object') {
+                    executeCommand(pm, [cacheCmd.cmd, ...cacheCmd.args]);
+                } else {
+                    executeCommand(pm, [cacheCmd]);
+                }
+            }
+        }
         return;
     }
 

@@ -2,6 +2,9 @@
 
 BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify package management across different Node.js ecosystems. It automatically detects the package manager used in your project (`npm`, `yarn`, or `pnpm`) and translates universal commands into the appropriate commands for that manager.
 
+[View on npm](https://www.npmjs.com/package/betterpack)
+[Buy me a coffee](https://www.buymeacoffee.com/involvex)
+
 ## Supported Package Managers
 
 *   **npm** (Node.js Package Manager)
@@ -33,8 +36,10 @@ BetterPack provides a consistent set of commands:
     *   `bpack manage <pm> <action> [args]`: Manage global packages.
     *   `bpack manage selfupdate`: Update betterpack.
     *   `bpack manage about <github|npmjs>`: Open the project's GitHub repository or npm page.
+    *   `bpack manage support`: Open the "Buy Me a Coffee" page.
 *   `node`: Execute a JavaScript file using Node.js.
 *   `watch`: Watch for file changes and auto-restart a process.
+*   `repair`: Attempt to repair a broken installation.
 
 ## Installation (for development/testing)
 
@@ -64,9 +69,3 @@ BetterPack will detect the package manager based on the lock file present and ex
 1.  **Detection:** BetterPack checks for the presence of `package-lock.json` (for npm), `yarn.lock` (for yarn), or `pnpm-lock.yaml` (for pnpm) in the current directory to identify the active package manager.
 2.  **Translation:** Based on the detected package manager, it translates the universal command (e.g., `install`) into the manager-specific command (e.g., `npm install`, `yarn install`, `pnpm install`).
 3.  **Execution:** The translated command is then executed using Node.js's `child_process.spawn`.
-
-## Future Enhancements
-
-*   More robust argument parsing.
-*   Configuration file for custom command mappings or aliases.
-*   Interactive mode for command selection.

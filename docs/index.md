@@ -1,10 +1,14 @@
 ---
 title: BetterPack Documentation
+layout: default
 ---
 
 # BetterPack - A Universal Node.js Package Manager CLI
 
 BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify package management across different Node.js ecosystems. It automatically detects the package manager used in your project (`npm`, `yarn`, or `pnpm`) and translates universal commands into the appropriate commands for that manager.
+
+[View on npm](https://www.npmjs.com/package/betterpack)
+[Buy me a coffee](https://www.buymeacoffee.com/involvex)
 
 ## Supported Package Managers
 
@@ -37,8 +41,10 @@ BetterPack provides a consistent set of commands:
     *   `bpack manage <pm> <action> [args]`: Manage global packages.
     *   `bpack manage selfupdate`: Update betterpack.
     *   `bpack manage about <github|npmjs>`: Open the project's GitHub repository or npm page.
+    *   `bpack manage support`: Open the "Buy Me a Coffee" page.
 *   `node`: Execute a JavaScript file using Node.js.
 *   `watch`: Watch for file changes and auto-restart a process.
+*   `repair`: Attempt to repair a broken installation.
 
 ## Installation (for development/testing)
 
