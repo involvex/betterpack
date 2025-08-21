@@ -14,3 +14,27 @@
   --table-border-color: #333;
   --code-background-color: #1e1e1e;
 }
+
+.site-nav a[href="#betterpack---a-universal-nodejs-package-manager-cli"]::before {
+  content: "info";
+  font-family: "Material Icons";
+  margin-right: 0.5em;
+}
+
+.site-nav a[href="#installation"]::before {
+  content: "download";
+  font-family: "Material Icons";
+  margin-right: 0.5em;
+}
+
+.site-nav a[href="#how-it-works"]::before {
+  content: "code";
+  font-family: "Material Icons";
+  margin-right: 0.5em;
+}
+
+.site-nav a[href="#support-the-project"]::before {
+  content: "favorite";
+  font-family: "Material Icons";
+  margin-right: 0.5em;
+}
