@@ -14,3 +14,10 @@ aux_links:
   "Development": "#how-it-works"
   "Support": "#support-the-project"
   "View on GitHub": "https://github.com/involvex/betterpack"
+
+footer_content: " "
+
+ga_tracking: UA-25399436-1
+
+head_scripts:
+  - /assets/js/custom.js
