@@ -6,6 +6,8 @@ color_scheme: dark
 
 url: https://involvex.github.io/betterpack
 
+logo: "/assets/logo.png"
+
 aux_links:
   "View on GitHub":
     - "https://github.com/involvex/betterpack"
