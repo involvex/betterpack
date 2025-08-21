@@ -8,7 +8,10 @@ layout: default
 BetterPack (`bpack`) is a command-line interface (CLI) tool designed to simplify package management across different Node.js ecosystems. It automatically detects the package manager used in your project (`npm`, `yarn`, or `pnpm`) and translates universal commands into the appropriate commands for that manager.
 
 [View on npm](https://www.npmjs.com/package/betterpack)
-[Buy me a coffee](https://www.buymeacoffee.com/involvex)
+
+## Support the Project
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/involvex)
 
 ## Supported Package Managers
 

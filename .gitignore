@@ -2,6 +2,9 @@
 .pkg-cache/*
 node_modules/*
 dist/*
+.clinerules/*
+node_modules/**/**
+pnpm-lock.yaml
 package-lock.json
 
 package.tgz
