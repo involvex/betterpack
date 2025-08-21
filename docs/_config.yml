@@ -9,8 +9,15 @@ url: https://involvex.github.io/betterpack
 logo: "/assets/logo.png"
 
 aux_links:
-  "Summary": "#betterpack---a-universal-nodejs-package-manager-cli"
-  "Installation": "#installation"
-  "Development": "#how-it-works"
-  "Support": "#support-the-project"
-  "View on GitHub": "https://github.com/involvex/betterpack"
+  "View on GitHub":
+    - "https://github.com/involvex/betterpack"
+
+nav_links:
+  - title: '<i class="material-icons">info</i> Summary'
+    url: "#betterpack---a-universal-nodejs-package-manager-cli"
+  - title: '<i class="material-icons">download</i> Installation'
+    url: "#installation"
+  - title: '<i class="material-icons">code</i> Development'
+    url: "#how-it-works"
+  - title: '<i class="material-icons">favorite</i> Support'
+    url: "#support-the-project"
