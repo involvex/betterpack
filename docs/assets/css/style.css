@@ -10,7 +10,7 @@ body {
 nav {
     background: #1f1f1f;
     color: #fff;
-    padding: 0.1rem 2rem;
+    padding: 0rem 2rem;
     position: fixed;
     width: 100%;
     top: 0;
@@ -32,7 +32,7 @@ nav {
 }
 
 .logo img {
-    height: 20px;
+    height: 18px;
     margin-right: 10px;
 }
 
@@ -103,24 +103,8 @@ a:hover {
 
 .button-container {
     margin-top: 20px;
-}
-
-.button {
-    background-color: transparent;
-    color: #bb86fc;
-    padding: 8px 18px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-right: 10px;
-    font-weight: bold;
-    display: inline-block;
-    border: 2px solid #bb86fc;
-    transition: all 0.3s ease;
-}
-
-.button:hover {
-    background-color: #bb86fc;
-    color: #121212;
+    display: flex;
+    gap: 10px;
 }
 
 footer {
