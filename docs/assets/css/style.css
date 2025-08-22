@@ -37,7 +37,7 @@ nav {
 }
 
 .logo span {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
@@ -48,9 +48,10 @@ nav {
 .nav-links a {
     color: #fff;
     text-decoration: none;
-    padding: 0 15px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
 }
 
 .nav-links a i {
@@ -130,4 +131,21 @@ footer {
 .footer-links a {
     color: #fff;
     margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    main {
+        padding-top: 120px;
+    }
 }
