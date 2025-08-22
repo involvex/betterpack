@@ -41,6 +41,10 @@ nav {
     font-weight: bold;
 }
 
+.nav-links {
+    display: flex;
+}
+
 .nav-links a {
     color: #fff;
     text-decoration: none;
