@@ -21,7 +21,7 @@ nav {
 
 .nav-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
 }
@@ -29,6 +29,7 @@ nav {
 .logo {
     display: flex;
     align-items: center;
+    margin-right: auto;
 }
 
 .logo img {
