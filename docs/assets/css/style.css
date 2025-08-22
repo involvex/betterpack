@@ -46,16 +46,23 @@ nav {
 }
 
 .nav-links a {
-    color: #fff;
+    color: #e0e0e0;
     text-decoration: none;
     padding: 0 10px;
     display: flex;
     align-items: center;
     font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a:hover i {
+    color: #bb86fc;
 }
 
 .nav-links a i {
     margin-right: 8px;
+    color: #888;
+    transition: color 0.3s ease;
 }
 
 main {
@@ -79,11 +86,14 @@ h1, h2, h3 {
 }
 
 pre {
-    background: #2c2c2c;
-    padding: 15px;
-    border-radius: 5px;
+    background: #2a2a2e;
+    padding: 1.5em;
+    border-radius: 8px;
     white-space: pre-wrap;
-    border: 1px solid #444;
+    border: 1px solid #3a3a3e;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    color: #dcdcdc;
+    overflow-x: auto;
 }
 
 code {
