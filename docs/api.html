@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - BetterPack</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">BetterPack</a></h1>
+                <span class="version">v2.0.0</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#commands">Commands</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="contributing.html">Contributing</a></li>
+                <li><a href="https://github.com/involvex/betterpack" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h1>API Reference</h1>
+            <p>Complete API documentation for BetterPack's programmatic interface.</p>
+
+            <h2>Core API</h2>
+            <div class="api-section">
+                <h3>detectPackageManager()</h3>
+                <div class="code-block">
+                    <pre><code>const { detectPackageManager } = require('betterpack');
+
+const pm = detectPackageManager();
+console.log(pm); // 'npm', 'yarn', 'pnpm', or 'bun'</code></pre>
+                </div>
+                <p>Detects the package manager based on lock files in the current directory.</p>
+            </div>
+
+            <div class="api-section">
+                <h3>executeCommand(command, args)</h3>
+                <div class="code-block">
+                    <pre><code>const { executeCommand } = require('betterpack');
+
+await executeCommand('install', []);
+await executeCommand('add', ['express', '--save-dev']);</code></pre>
+                </div>
+                <p>Executes a universal command using the detected package manager.</p>
+            </div>
+
+            <h2>Agent API</h2>
+            <div class="api-section">
+                <h3>ProjectAnalyzer</h3>
+                <div class="code-block">
+                    <pre><code>const { ProjectAnalyzer } = require('betterpack/agent');
+
+const analyzer = new ProjectAnalyzer();
+const analysis = await analyzer.analyzeProject('./my-project');
+
+console.log(analysis.health); // Health score 0-100
+console.log(analysis.issues); // Array of detected issues
+console.log(analysis.recommendations); // Suggested actions</code></pre>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>SmartAgent</h3>
+                <div class="code-block">
+                    <pre><code>const { SmartAgent } = require('betterpack/agent');
+
+const agent = new SmartAgent({
+    mode: 'conservative', // 'conservative', 'balanced', 'aggressive'
+    aiProvider: 'google',
+    apiKey: process.env.GOOGLE_API_KEY // Free tier available
+});
+
+await agent.start('./my-project');</code></pre>
+                </div>
+            </div>
+
+            <h2>Bundler API</h2>
+            <div class="api-section">
+                <h3>ProjectBundler</h3>
+                <div class="code-block">
+                    <pre><code>const { ProjectBundler } = require('betterpack/bundler');
+
+const bundler = new ProjectBundler();
+
+// Bundle as single JS file
+await bundler.bundle({
+    format: 'js',
+    output: 'dist/bundle.js',
+    minify: true
+});
+
+// Create executable
+await bundler.bundle({
+    format: 'exe',
+    output: 'dist/myapp.exe',
+    platform: 'win32'
+});</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 BetterPack. Open source project by <a href="https://github.com/involvex" target="_blank">InvolveX</a></p>
+            <div class="footer-links">
+                <a href="https://github.com/involvex/betterpack" target="_blank">GitHub</a>
+                <a href="https://npmjs.com/package/betterpack" target="_blank">npm</a>
+                <a href="contributing.html">Contributing</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

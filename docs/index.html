@@ -4,183 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BetterPack Documentation</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://raw.githubusercontent.com/involvex/betterpack/main/favicon.ico">
 </head>
 <body>
-    <nav>
+    <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">
-                <img src="assets/logo.png" alt="BetterPack Logo">
-                <span>BetterPack</span>
+            <div class="nav-brand">
+                <h1>BetterPack</h1>
+                <span class="version">v2.0.0</span>
             </div>
-            <div class="nav-links">
-                <a href="#summary"><i class="material-icons">description</i>Summary</a>
-                <a href="#installation"><i class="material-icons">download</i>Installation</a>
-                <a href="#development"><i class="material-icons">code</i>Development</a>
-                <a href="#support"><i class="material-icons">favorite</i>Support</a>
-                <a href="https://github.com/involvex/betterpack" target="_blank" rel="noopener"><i class="material-icons">link</i>View on GitHub</a>
-            </div>
+            <ul class="nav-menu">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="contributing.html">Contributing</a></li>
+                <li><a href="https://github.com/involvex/betterpack" target="_blank">GitHub</a></li>
+            </ul>
         </div>
     </nav>
-    <main>
-        <section id="summary">
-            <h1>BetterPack - A Universal Node.js Package Manager CLI</h1>
-            <p>BetterPack (<code>bpack</code>) is a command-line interface (CLI) tool designed to simplify package management across different Node.js ecosystems. It automatically detects the package manager used in your project (<code>npm</code>, <code>yarn</code>, or <code>pnpm</code>) and translates universal commands into the appropriate commands for that manager.</p>
-            <div class="button-container">
-                <a href="https://github.com/involvex/betterpack/releases" target="_blank" rel="noopener">
-                    <img src="https://img.shields.io/github/v/release/involvex/betterpack?style=for-the-badge" alt="GitHub release">
-                </a>
-                <a href="https://www.npmjs.com/package/betterpack" target="_blank" rel="noopener">
-                    <img src="https://img.shields.io/npm/v/betterpack?style=for-the-badge" alt="npm version">
-                </a>
+
+    <main class="container">
+        <section id="hero" class="hero">
+            <h1>BetterPack</h1>
+            <p class="hero-subtitle">Universal Package Manager Interface with AI-Powered Project Management</p>
+            <div class="hero-buttons">
+                <a href="#installation" class="btn btn-primary">Get Started</a>
+                <a href="https://npmjs.com/package/betterpack" class="btn btn-secondary" target="_blank">View on npm</a>
             </div>
         </section>
 
-        <section id="installation">
+        <section id="overview" class="section">
+            <h2>Overview</h2>
+            <p>BetterPack is a universal interface for package managers that provides a consistent set of commands across npm, yarn, pnpm, and bun. It automatically detects your project's package manager and translates commands accordingly.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🚀 Universal Commands</h3>
+                    <p>One set of commands works across all package managers</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 AI Integration</h3>
+                    <p>Built-in AI assistant for project management and code generation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📦 Smart Bundling</h3>
+                    <p>Bundle projects into executables, installers, and archives</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔧 Auto-Detection</h3>
+                    <p>Automatically detects and uses the right package manager</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="installation" class="section">
             <h2>Installation</h2>
-            <p>You can install BetterPack globally using your favorite package manager:</p>
-            <h3>npm</h3>
-            <pre><code>npm install -g betterpack</code></pre>
-            <h3>yarn</h3>
-            <pre><code>yarn global add betterpack</code></pre>
-            <h3>pnpm</h3>
-            <pre><code>pnpm add -g betterpack</code></pre>
-            <h3>bun</h3>
-            <pre><code>bun add -g betterpack</code></pre>
+            <div class="code-block">
+                <pre><code>npm install -g betterpack</code></pre>
+            </div>
+            <p>Or using other package managers:</p>
+            <div class="code-tabs">
+                <div class="tab-content">
+                    <pre><code># Using yarn
+yarn global add betterpack
+
+# Using pnpm  
+pnpm add -g betterpack
+
+# Using bun
+bun add -g betterpack</code></pre>
+                </div>
+            </div>
         </section>
 
-        <section>
-            <h2>Supported Package Managers</h2>
-            <ul>
-                <li><strong>npm</strong> (Node.js Package Manager)</li>
-                <li><strong>yarn</strong></li>
-                <li><strong>pnpm</strong></li>
-                <li><strong>bun</strong></li>
-            </ul>
-        </section>
-
-        <section>
+        <section id="commands" class="section">
             <h2>Universal Commands</h2>
-            <p>BetterPack provides a consistent set of commands:</p>
-            <ul>
-                <li><code>install</code>: Install dependencies.</li>
-                <li><code>add <package></code>: Add a new package/dependency.</li>
-                <li><code>remove <package></code>: Remove an existing package/dependency.</li>
-                <li><code>update</code>: Update dependencies.</li>
-                <li><code>run></code>: Run a script defined in the project's <code>package.json</code>.</li>
-                <li><code>test</code>: Run tests.</li>
-                <li><code>build</code>: Build the project.</li>
-                <li><code>outdated</code>: Check for outdated dependencies.</li>
-                <li><code>list</code>: List installed packages.</li>
-                <li><code>doctor</code>: Run a health check on the project.</li>
-            </ul>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <h3>bpack install</h3>
+                    <p>Install all dependencies</p>
+                </div>
+                <div class="command-card">
+                    <h3>bpack add &lt;package&gt;</h3>
+                    <p>Add a new package</p>
+                </div>
+                <div class="command-card">
+                    <h3>bpack remove &lt;package&gt;</h3>
+                    <p>Remove a package</p>
+                </div>
+                <div class="command-card">
+                    <h3>bpack update</h3>
+                    <p>Update dependencies</p>
+                </div>
+                <div class="command-card">
+                    <h3>bpack run &lt;script&gt;</h3>
+                    <p>Run a package script</p>
+                </div>
+                <div class="command-card">
+                    <h3>bpack test</h3>
+                    <p>Run tests</p>
+                </div>
+            </div>
+
+            <h3>BetterPack Specific Commands</h3>
+            <div class="command-list">
+                <div class="command-item">
+                    <code>bpack create</code>
+                    <span>Interactive AI-powered project builder</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack bundle</code>
+                    <span>Bundle project into various formats (JS, ZIP, EXE, MSIX)</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack agent</code>
+                    <span>Start automated project management agent</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack gemini</code>
+                    <span>Interactive chat with Google's Gemini AI</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack host</code>
+                    <span>Start local web server (default port 4020)</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack watch &lt;file&gt;</code>
+                    <span>Watch file for changes and auto-restart</span>
+                </div>
+                <div class="command-item">
+                    <code>bpack git &lt;command&gt;</code>
+                    <span>Git wrapper with AI-generated commit messages</span>
+                </div>
+            </div>
         </section>
 
-        <section>
-            <h2>Betterpack Commands</h2>
-            <h3><code>bpack gemini</code></h3>
-            <p>Starts an interactive chat session with Google's Gemini AI.</p>
+        <section id="examples" class="section">
+            <h2>Examples</h2>
+            <div class="example-block">
+                <h3>Basic Usage</h3>
+                <pre><code># Install dependencies
+bpack install
 
-            <h3><code>bpack host</code></h3>
-            <p>Starts a local web server in the current directory.</p>
-            <ul>
-                <li><strong>Default Port</strong>: <code>4020</code></li>
-                <li><strong>Default Host</strong>: <code>0.0.0.0</code></li>
-            </ul>
+# Add a package
+bpack add express
 
-            <h3><code>bpack listversions</code></h3>
-            <p>Lists the installed versions of all supported package managers.</p>
+# Run development server
+bpack run dev
 
-            <h3><code>bpack manage</code></h3>
-            <p>A suite of commands for managing global packages and the tool itself.</p>
-            <ul>
-                <li><code>bpack manage <pm> <action> [args]</code>: Manage global packages for a specific package manager.</li>
-                <li><code>bpack manage selfupdate</code>: Automatically updates <code>betterpack</code> to the latest version.</li>
-                <li><code>bpack manage about <github|npmjs></code>: Opens the project's GitHub repository or npm page in your browser.</li>
-                <li><code>bpack manage support</code>: Opens the "Buy Me a Coffee" page to support the project.</li>
-                <li><code>bpack manage git autocommit <on|off></code>: Enable or disable autocommit.</li>
-            </ul>
+# Build project
+bpack build</code></pre>
+            </div>
 
-            <h3><code>bpack node <file></code></h3>
-            <p>Executes a JavaScript file using Node.js.</p>
+            <div class="example-block">
+                <h3>AI-Powered Project Creation</h3>
+                <pre><code># Start interactive project builder
+bpack create
 
-            <h3><code>bpack watch <file></code></h3>
-            <p>Watches a file for changes and automatically restarts the process.</p>
+# Bundle project as executable
+bpack bundle --format exe --output myapp.exe
 
-            <h3><code>bpack repair</code></h3>
-            <p>Attempts to repair a broken <code>betterpack</code> installation by reinstalling it and clearing package manager caches.</p>
-
-            <h3><code>bpack noinstall <command></code></h3>
-            <p>Runs a command without installing the package globally, using <code>pnpm dlx</code> or <code>yarn dlx</code>.</p>
-
-            <h3><code>bpack create-shortcut <shortcut> <command></code></h3>
-            <p>Creates a shortcut for a <code>bpack</code> command. For example, <code>bpack create-shortcut bl bpack list</code> will allow you to run <code>bpack list</code> by simply typing <code>bl</code>.</p>
-
-            <h3><code>bpack git <command></code></h3>
-            <p>A wrapper for common git commands.</p>
-            <ul>
-                <li><code>bpack git init</code>: Initialize a new git repository.</li>
-                <li><code>bpack git clone <repo></code>: Clone a repository.</li>
-                <li><code>bpack git pull</code>: Pull changes from the remote repository.</li>
-                <li><code>bpack git push</code>: Push changes to the remote repository.</li>
-                <li><code>bpack git commit</code>: Commit changes. If autocommit is enabled, Gemini will generate a commit message.</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Usage</h2>
-            <p>Once installed, you can use `bpack` from any Node.js project directory. BetterPack will automatically detect the package manager from the lock file (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) and use it to run the commands.</p>
-            <h3>Examples</h3>
-            <p>Install dependencies:</p>
-            <pre><code>bpack install</code></pre>
-            <p>Add a new dependency:</p>
-            <pre><code>bpack add express</code></pre>
-            <p>Run a script from your `package.json`:</p>
-            <pre><code>bpack run dev</code></pre>
-        </section>
-
-        <section id="configuration">
-            <h2>Configuration</h2>
-            <p>BetterPack works out of the box with no configuration required. However, you can customize its behavior using a <code>.bpackrc</code> file in your project's root directory. The configuration file should be in JSON format.</p>
-            <h3>Example <code>.bpackrc</code></h3>
-            <pre><code>{
-  "defaultPackageManager": "pnpm",
-  "autoCommit": true
-}</code></pre>
-            <h3>Options</h3>
-            <ul>
-                <li><strong>defaultPackageManager</strong>: Set a default package manager to use if no lock file is found. Can be `npm`, `yarn`, or `pnpm`.</li>
-                <li><strong>autoCommit</strong>: Enable or disable autocommit for git commands. Can be `true` or `false`.</li>
-            </ul>
-        </section>
-
-        <section id="development">
-            <h2>How it Works</h2>
-            <ol>
-                <li><strong>Detection:</strong> BetterPack checks for the presence of <code>package-lock.json</code> (for npm), <code>yarn.lock</code> (for yarn), or <code>pnpm-lock.yaml</code> (for pnpm) in the current directory to identify the active package manager.</li>
-                <li><strong>Translation:</strong> Based on the detected package manager, it translates the universal command (e.g., <code>install</code>) into the manager-specific command (e.g., <code>npm install</code>, <code>yarn install</code>, <code>pnpm install</code>).</li>
-                <li><strong>Execution:</strong> The translated command is then executed using Node.js's <code>child_process.spawn</code>.</li>
-            </ol>
-        </section>
-        <section id="support">
-            <h2>Support the Project</h2>
-            <a href="https://www.buymeacoffee.com/involvex">
-                <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
-            </a>
+# Start automated agent
+bpack agent start</code></pre>
+            </div>
         </section>
     </main>
-    <footer>
-        <div class="footer-container">
-            <div class="logo">
-                <img src="assets/logo.png" alt="BetterPack Logo">
-                <span>BetterPack</span>
-            </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 BetterPack. Open source project by <a href="https://github.com/involvex" target="_blank">InvolveX</a></p>
             <div class="footer-links">
-                <a href="https://github.com/involvex/betterpack" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://www.buymeacoffee.com/involvex" target="_blank" rel="noopener">Buy Me a Coffee</a>
+                <a href="https://github.com/involvex/betterpack" target="_blank">GitHub</a>
+                <a href="https://npmjs.com/package/betterpack" target="_blank">npm</a>
+                <a href="contributing.html">Contributing</a>
             </div>
         </div>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
