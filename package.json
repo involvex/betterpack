@@ -11,7 +11,11 @@
     "test": "node test-runner.cjs",
     "build": "rollup -c",
     "dev": "node cli.js",
-    "lint": "eslint ."
+    "lint": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "audit": "npm audit --audit-level=high",
+    "audit-fix": "npm audit fix",
+    "test:full": "npm run lint && npm run type-check && npm run audit && node test-runner.cjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
