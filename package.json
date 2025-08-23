@@ -11,7 +11,7 @@
     "test": "node test-runner.cjs",
     "build": "rollup -c",
     "dev": "node cli.js",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
@@ -89,6 +89,7 @@
     "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -99,7 +100,7 @@
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.4",
     "lucide-react": "^0.541.0",
-    "nexe": "^4.0.0-rc.2",
+    "nexe": "^5.0.0-beta.4",
     "pkg": "^5.8.1",
     "postcss": "^8.5.6",
     "rollup": "^4.6.1",
